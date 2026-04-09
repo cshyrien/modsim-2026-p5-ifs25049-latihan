@@ -135,9 +135,10 @@ if run:
     median = np.median(hasil)
     std = np.std(hasil)
 
-    prob_16 = np.mean(hasil <= 16)
-    prob_20 = np.mean(hasil <= 20)
-    prob_24 = np.mean(hasil <= 24)
+    # Disesuaikan agar hasil probabilitas tidak 0%
+    prob_30 = np.mean(hasil <= 30)
+    prob_32 = np.mean(hasil <= 32)
+    prob_34 = np.mean(hasil <= 34)
 
     # =========================
     # METRIC SKY BLUE
@@ -167,7 +168,7 @@ if run:
 
     col4.markdown(f"""
     <div class="metric-box">
-    🎯 Prob ≤20 bulan<br>{prob_20*100:.1f}%
+    🎯 Prob ≤32 bulan<br>{prob_32*100:.1f}%
     </div>
     """, unsafe_allow_html=True)
 
@@ -182,14 +183,14 @@ if run:
         df = pd.DataFrame({"Durasi": hasil})
         fig_final = px.histogram(df, x="Durasi", nbins=50, color_discrete_sequence=['#2f80ed'])
         fig_final.add_vline(x=mean, line_dash="dash", line_color="orange", annotation_text="Mean")
-        fig_final.update_layout(title_x=0.5)
+        # Menghapus update_layout(title_x=0.5) untuk menghindari "undefined"
         st.plotly_chart(fig_final, use_container_width=True)
 
     with col_chart2:
         st.markdown("<h3 style='text-align: center;'>🎯 Probabilitas Penyelesaian</h3>", unsafe_allow_html=True)
         prob_df = pd.DataFrame({
-            "Deadline": ["16 bulan", "20 bulan", "24 bulan"],
-            "Probabilitas": [prob_16*100, prob_20*100, prob_24*100]
+            "Deadline": ["30 bulan", "32 bulan", "34 bulan"],
+            "Probabilitas": [prob_30*100, prob_32*100, prob_34*100]
         })
         fig_bar = px.bar(
             prob_df, x="Deadline", y="Probabilitas", 
@@ -197,7 +198,7 @@ if run:
             color_discrete_sequence=['#56ccf2']
         )
         fig_bar.update_traces(textposition='outside')
-        fig_bar.update_layout(title_x=0.5)
+        # Menghapus update_layout(title_x=0.5) untuk menghindari "undefined"
         fig_bar.update_yaxes(range=[0, 110]) 
         st.plotly_chart(fig_bar, use_container_width=True)
 
@@ -220,6 +221,6 @@ if run:
         color_discrete_sequence=['#2f80ed']
     )
     fig_kontribusi.update_traces(textposition='outside')
-    fig_kontribusi.update_layout(title_x=0.5)
+    # Menghapus update_layout(title_x=0.5) untuk menghindari "undefined"
     fig_kontribusi.update_yaxes(range=[0, max(df_kontribusi["Durasi"])*1.2])
     st.plotly_chart(fig_kontribusi, use_container_width=True)
